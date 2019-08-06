@@ -1,5 +1,9 @@
 import cli_display
-import keyboard
+try:
+    import keyboard
+excpet:
+    print("install keyboard module, using\npython -m pip install keyboard")
+    exit()
 from cli_display import sleep,system
 from random import randint
 class game(object):
