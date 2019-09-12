@@ -1,9 +1,5 @@
 import cli_display
-try:
-    import keyboard
-excpet:
-    print("install keyboard module, using\npython -m pip install keyboard")
-    exit()
+import keyboard
 from cli_display import sleep,system
 from random import randint
 class game(object):
@@ -42,16 +38,15 @@ class game(object):
                 self.r_pos_x=0
 
     def collison_detect(self):
-        mpos=[self.m_posx,self.m_posy]
+        mpos=set()
+        mpos.add((self.m_posx,self.m_posy))
         rx=self.r_pos_x
         ry=self.r_pos_y
-        field=[[rx-2,ry],[rx,ry+1],[rx+1,ry+1],
-        [rx+2,ry+1],[rx+3,ry+1],[rx+4,ry+1],
-        [rx+1,ry+2],[rx+3,ry+2]]
-        if mpos in field:
+        field= self.rocket_frame.bounding_box(self.sprite,(rx,ry))
+        z= mpos & field
+        if mpos & field:
             self.randomize_mineral()
             self.point+=1
-            print("\a")
 
     def randomize_mineral(self):
         self.m_posx=randint(5,self.y-5)
@@ -70,8 +65,8 @@ class game(object):
             self.collison_detect()
             self.rocket_frame.wait(self.rate)
             self.rocket_frame.clear_frame()
-            #self.rocket_frame.cmd_command() #win7 uncomment
-            self.time_control+=1
+            self.rocket_frame.cmd_command("cls")
+            self.time_control+=.1
             self.m_f+=1
             if self.m_f==12:
                 self.m_f=0
